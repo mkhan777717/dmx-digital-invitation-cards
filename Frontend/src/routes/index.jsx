@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import heroBg from "@/assets/hero-bg.jpg";
 import tplWedding from "@/assets/template-wedding.jpg";
@@ -140,12 +140,12 @@ function Nav() {
           ))}
         </nav>
         <div className="flex items-center gap-3">
-          <a href="#" className="hidden text-sm text-foreground/80 hover:text-foreground sm:inline">
+          <Link to="/login" className="hidden text-sm text-foreground/80 hover:text-foreground sm:inline">
             Sign in
-          </a>
-          <a href="#cta" className="btn-gold btn-gold-hover text-sm">
+          </Link>
+          <Link to="/create" className="btn-gold btn-gold-hover text-sm">
             Create Invite
-          </a>
+          </Link>
         </div>
       </div>
     </header>
@@ -208,10 +208,10 @@ function Hero() {
             perfected by taste — for weddings, galas, and moments worth remembering.
           </p>
           <div className="mt-10 flex flex-wrap items-center gap-4">
-            <a href="#cta" className="btn-gold btn-gold-hover">
+            <Link to="/create" className="btn-gold btn-gold-hover">
               Start Designing
               <ArrowIcon />
-            </a>
+            </Link>
             <a href="#templates" className="btn-ghost-gold hover:bg-white/5">
               Browse Templates
             </a>
@@ -753,7 +753,7 @@ function FinalCTA() {
             </h2>
             <p className="mx-auto mt-6 max-w-xl text-foreground/70">Start free — no credit card required. Upgrade only when you're ready to send.</p>
             <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-              <a href="#" className="btn-gold btn-gold-hover">Create your invitation</a>
+              <Link to="/create" className="btn-gold btn-gold-hover">Create your invitation</Link>
               <a href="#pricing" className="btn-ghost-gold hover:bg-white/5">See pricing</a>
             </div>
           </div>

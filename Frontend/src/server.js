@@ -1,6 +1,6 @@
 import "./lib/error-capture";
 
-import { consumeLastCapturedError } from "./lib/error-capture";
+import { capture } from "./lib/error-capture";
 import { renderErrorPage } from "./lib/error-page";
 
 let serverEntryPromise;
@@ -26,9 +26,10 @@ async function normalizeCatastrophicSsrResponse(response) {
   if (!isH3SwallowedErrorBody(body)) return response;
 
   console.error(
-    consumeLastCapturedError() ??
+    capture() ??
       new Error(`h3 swallowed SSR error: ${body}`)
   );
+
 
   return new Response(renderErrorPage(), {
     status: 500,

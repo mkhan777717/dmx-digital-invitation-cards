@@ -4,6 +4,7 @@ const app = express();
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const authRoutes = require("./routes/authRoutes");
+const templateRoutes = require("")
 
 const corsOption = {
     origin: process.env.CLIENT_URL,
@@ -19,6 +20,9 @@ app.use(cookieParser());
 
 // Routes 
 app.use("/api",authRoutes);
+
+// Templates Routes
+app.use("/api",)
 
 
 module.exports = app

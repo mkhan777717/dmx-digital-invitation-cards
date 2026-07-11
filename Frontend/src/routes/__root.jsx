@@ -192,12 +192,16 @@ function RootShell({ children }) {
   );
 }
 
+import { AuthProvider } from "../context/AuthContext";
+
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Outlet />
+      <AuthProvider>
+        <Outlet />
+      </AuthProvider>
     </QueryClientProvider>
   );
 }
