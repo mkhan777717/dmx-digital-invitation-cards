@@ -4,7 +4,8 @@ const app = express();
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const authRoutes = require("./routes/authRoutes");
-const templateRoutes = require("")
+const templateRoutes = require("./routes/templateRoutes");
+const invitationRoutes = require("./routes/invitationRoutes")
 
 const corsOption = {
     origin: process.env.CLIENT_URL,
@@ -18,11 +19,13 @@ app.use(cors(corsOption))
 app.use(express.json());
 app.use(cookieParser());
 
-// Routes 
+// auth Routes 
 app.use("/api",authRoutes);
 
 // Templates Routes
-app.use("/api",)
+app.use("/api",templateRoutes);
 
+// Invitation Routes
+app.use("/api",invitationRoutes);
 
 module.exports = app
