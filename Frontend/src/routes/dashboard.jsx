@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import DashboardLayout from "../layouts/DashboardLayout";
 import { invitationService } from "../services/invitation.service";
 import { templateService } from "../services/template.service";
@@ -10,6 +10,31 @@ export const Route = createFileRoute("/dashboard")({
 });
 
 function Dashboard() {
+  const titleRef = useRef(null);
+
+  function Typewriter({ text, speed = 40 }) {
+    const [display, setDisplay] = useState("");
+
+    useEffect(() => {
+      let i = 0;
+
+      const timer = setInterval(() => {
+        setDisplay(text.slice(0, i + 1));
+        i++;
+
+        if (i >= text.length) clearInterval(timer);
+      }, speed);
+
+      return () => clearInterval(timer);
+    }, [text, speed]);
+
+    return (
+      <span>
+        {display}
+        <span className="animate-pulse text-gold">|</span>
+      </span>
+    );
+  }
   const navigate = useNavigate();
   const [invitations, setInvitations] = useState([]);
   const [templates, setTemplates] = useState([]);
@@ -69,14 +94,17 @@ function Dashboard() {
         {/* Welcome Section */}
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between border-b border-white/5 pb-8">
           <div>
-            <h1 className="font-display text-4xl text-foreground">
-              Your Studio <em className="text-gold-gradient not-italic">Dashboard</em>
+            <h1
+              ref={titleRef}
+              className="animate-slide-left floating-text font-display text-4xl text-foreground"
+            >
+              <Typewriter text="Your Studio" speed={35} /><em className="text-gold-gradient not-italic">Dashboard</em>
             </h1>
-            <p className="mt-2 text-sm text-foreground/60">
+            <p className="animate-slide-right mt-2 text-sm text-foreground/60">
               Manage your bespoke digital invitation campaigns and templates.
             </p>
           </div>
-          <Link to="/templates" className="btn-gold btn-gold-hover self-start text-xs uppercase tracking-widest gap-2">
+          <Link to="/templates" className="animate-fade-up btn-gold btn-gold-hover self-start text-xs uppercase tracking-widest gap-2">
             <Plus size={14} />
             Create Invitation
           </Link>
@@ -90,13 +118,17 @@ function Dashboard() {
             { label: "Pending Payments", val: pendingInvites, desc: "Awaiting settlement", icon: Clock },
             { label: "Estimated Page Views", val: totalInvites > 0 ? mockPageViews.toLocaleString() : 0, desc: "Total guest impressions", icon: Eye },
           ].map((stat, i) => (
-            <div key={i} className="glass gradient-border rounded-3xl p-6 relative overflow-hidden">
+            <div key={i} className="glass gradient-border rounded-3xl p-6 relative overflow-hidden animate-fade-up hover:-translate-y-1 transition animate-fade-up hover:-translate-y-1 duration-500"
+              style={{
+                animationDelay: `${i * 120}ms`,
+                animationFillMode: "both",
+              }}>
               <div className="absolute right-4 top-4 text-gold/30">
                 <stat.icon size={22} />
               </div>
-              <p className="text-xs uppercase tracking-widest text-foreground/50">{stat.label}</p>
-              <h3 className="mt-4 font-display text-3xl text-gold-gradient">{stat.val}</h3>
-              <p className="mt-2 text-xs text-foreground/40">{stat.desc}</p>
+              <p className="animate-slide-right text-xs uppercase tracking-widest text-foreground/50">{stat.label}</p>
+              <h3 className="animate-slide-left mt-4 font-display text-3xl text-gold-gradient">{stat.val}</h3>
+              <p className="animate-slide-right mt-2 text-xs text-foreground/40">{stat.desc}</p>
             </div>
           ))}
         </div>
@@ -106,7 +138,7 @@ function Dashboard() {
           {/* Recent Invitations */}
           <div className="space-y-6">
             <div className="flex items-center justify-between">
-              <h2 className="font-display text-2xl text-foreground">Recent Campaigns</h2>
+              <h2 className="animate-slide-left font-display text-2xl text-foreground">Recent Campaigns</h2>
               {invitations.length > 0 && (
                 <Link to="/my-invitations" className="text-xs text-gold/80 hover:text-gold flex items-center gap-1 transition">
                   View All <ArrowRight size={12} />
@@ -141,12 +173,12 @@ function Dashboard() {
                         <span className="rounded-full bg-white/5 border border-white/5 px-2.5 py-0.5 text-[10px] uppercase tracking-widest text-gold">
                           {getTemplateTitle(inv.templateId)}
                         </span>
-                        <h4 className="font-display text-lg text-foreground mt-1 truncate">
+                        <h4 className="animate-slide-left font-display text-lg text-foreground mt-1 truncate">
                           {inv.eventDetails.brideName && inv.eventDetails.groomName
                             ? `${inv.eventDetails.brideName} & ${inv.eventDetails.groomName}`
                             : inv.eventDetails.celebrantName || inv.eventDetails.eventTitle || "Bespoke Invitation"}
                         </h4>
-                        <p className="text-xs text-foreground/45 flex items-center gap-1 mt-1">
+                        <p className="animate-slide-right text-xs text-foreground/45 flex items-center gap-1 mt-1">
                           <Calendar size={11} /> {inv.eventDetails.date || "Date Undefined"}
                         </p>
                       </div>
@@ -155,11 +187,10 @@ function Dashboard() {
                     <div className="flex items-center gap-4 w-full sm:w-auto justify-between sm:justify-end border-t sm:border-t-0 border-white/5 pt-4 sm:pt-0">
                       {/* Status Pills */}
                       <div className="flex flex-col items-end gap-1.5">
-                        <span className={`rounded-full px-2.5 py-0.5 text-[9px] uppercase tracking-widest font-semibold border ${
-                          inv.status === "Published"
-                            ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
-                            : "bg-amber-500/10 text-amber-400 border-amber-500/20"
-                        }`}>
+                        <span className={`rounded-full px-2.5 py-0.5 text-[9px] uppercase tracking-widest font-semibold border ${inv.status === "Published"
+                          ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
+                          : "bg-amber-500/10 text-amber-400 border-amber-500/20"
+                          }`}>
                           {inv.status}
                         </span>
                         <span className="text-[10px] text-foreground/40">
@@ -203,9 +234,9 @@ function Dashboard() {
 
           {/* Quick Actions Panel */}
           <div className="space-y-6">
-            <h2 className="font-display text-2xl text-foreground">Quick Tools</h2>
+            <h2 className="animate-slide-left font-display text-2xl text-foreground">Quick Tools</h2>
             <div className="glass gradient-border rounded-3xl p-6 space-y-4">
-              <Link to="/templates" className="flex items-center justify-between rounded-2xl bg-white/5 border border-white/5 p-4 hover:border-gold/30 hover:bg-white/10 transition group">
+              <Link to="/templates" className="animate-slide-left flex items-center justify-between rounded-2xl bg-white/5 border border-white/5 p-4 hover:border-gold/30 hover:bg-white/10 transition group">
                 <div>
                   <h4 className="text-sm font-medium text-foreground">Browse Art Library</h4>
                   <p className="text-xs text-foreground/50 mt-1">Select designers' couture templates</p>
@@ -213,7 +244,7 @@ function Dashboard() {
                 <ArrowRight size={14} className="text-gold opacity-60 group-hover:opacity-100 group-hover:translate-x-1 transition" />
               </Link>
 
-              <Link to="/profile" className="flex items-center justify-between rounded-2xl bg-white/5 border border-white/5 p-4 hover:border-gold/30 hover:bg-white/10 transition group">
+              <Link to="/profile" className="animate-slide-left flex items-center justify-between rounded-2xl bg-white/5 border border-white/5 p-4 hover:border-gold/30 hover:bg-white/10 transition group">
                 <div>
                   <h4 className="text-sm font-medium text-foreground">Billing & Subscriptions</h4>
                   <p className="text-xs text-foreground/50 mt-1">Manage Atelier / Signature subscription</p>

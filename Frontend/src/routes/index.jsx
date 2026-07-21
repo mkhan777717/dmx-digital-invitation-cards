@@ -10,6 +10,7 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
+
 /* ---------------- Small helpers ---------------- */
 
 function ArrowIcon({ size = 16, className = "" }) {
@@ -113,21 +114,23 @@ function Nav() {
   const links = ["Templates", "Features", "Pricing", "Blog"];
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${
-        scrolled ? "py-3" : "py-6"
-      }`}
+      className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${scrolled ? "py-3" : "py-6"
+        }`}
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6">
-        <a href="#" className="flex items-center gap-3">
+        <a href="#" className="flex items-center animate-slide-left"
+          style={{
+            animationDelay: ".2s",
+            animationFillMode: "both",
+          }}>
           <span className="grid h-10 w-10 place-items-center rounded-full glass">
             <span className="font-display text-gold-gradient text-lg">I</span>
           </span>
           <span className="font-display text-lg tracking-wide">Invite Studio</span>
         </a>
         <nav
-          className={`hidden items-center gap-1 rounded-full px-2 py-2 transition-all md:flex ${
-            scrolled ? "glass" : ""
-          }`}
+          className={`hidden items-center gap-1 rounded-full px-2 py-2 transition-all md:flex ${scrolled ? "glass" : ""
+            }`}
         >
           {links.map((l) => (
             <a
@@ -139,11 +142,17 @@ function Nav() {
             </a>
           ))}
         </nav>
-        <div className="flex items-center gap-3">
+        <div
+          className="flex items-center gap-3 animate-fade-down"
+          style={{
+            animationDelay: ".2s",
+            animationFillMode: "both",
+          }}
+        >
           <Link to="/login" className="hidden text-sm text-foreground/80 hover:text-foreground sm:inline">
             Sign in
           </Link>
-          <Link to="/create" className="btn-gold btn-gold-hover text-sm">
+          <Link to="/create" className="btn-gold animate scale btn-gold-hover text-sm">
             Create Invite
           </Link>
         </div>
@@ -153,6 +162,35 @@ function Nav() {
 }
 
 function Hero() {
+
+  function Typewriter({
+    text,
+    speed = 45,
+    className = "",
+  }) {
+    const [display, setDisplay] = useState("");
+
+    useEffect(() => {
+      let i = 0;
+
+      const timer = setInterval(() => {
+        setDisplay(text.slice(0, i + 1));
+        i++;
+
+        if (i >= text.length) clearInterval(timer);
+      }, speed);
+
+      return () => clearInterval(timer);
+    }, [text, speed]);
+
+    return (
+      <span className={className}>
+        {display}
+        <span className="animate-pulse">|</span>
+      </span>
+    );
+  }
+
   return (
     <section className="relative flex min-h-screen items-center overflow-hidden">
       <img
@@ -195,19 +233,49 @@ function Hero() {
 
       <div className="relative z-10 mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-16 px-6 pt-32 pb-24 lg:grid-cols-[1.1fr_0.9fr]">
         <div className="animate-reveal-up">
-          <span className="inline-flex items-center gap-2 rounded-full glass px-4 py-2 text-xs uppercase tracking-[0.2em] text-foreground/80">
+          <span className="animate-slide-right inline-flex items-center gap-2 rounded-full glass px-4 py-2 text-xs uppercase tracking-[0.2em] text-foreground/80">
             <span className="h-1.5 w-1.5 rounded-full bg-gold animate-glow-pulse" />
             Handcrafted digital invitations
           </span>
           <h1 className="mt-8 font-display text-5xl leading-[1.05] sm:text-6xl lg:text-7xl">
-            Invitations that feel <br />
-            like an <em className="text-gold-gradient not-italic">occasion</em>.
+            <Typewriter
+              text="Invitations that feel"
+              speed={40}
+            />
+
+            <br />
+
+            <span
+              className="inline-block animate-slide-left"
+              style={{
+                animationDelay: ".6s",
+                animationFillMode: "both",
+              }}
+            >
+              like an{" "}
+              <em className="text-gold-gradient not-italic">
+                occasion
+              </em>
+              .
+            </span>
           </h1>
-          <p className="mt-6 max-w-xl text-lg text-foreground/70">
+          <p
+            className="animate-slide-left mt-6 max-w-xl text-lg text-foreground/70"
+            style={{
+              animationDelay: ".9s",
+              animationFillMode: "both",
+            }}
+          >
             Design cinematic, couture-grade invitations in minutes. Powered by AI,
             perfected by taste — for weddings, galas, and moments worth remembering.
           </p>
-          <div className="mt-10 flex flex-wrap items-center gap-4">
+          <div
+            className="mt-10 flex flex-wrap items-center gap-4 animate-fade-up"
+            style={{
+              animationDelay: "1.2s",
+              animationFillMode: "both",
+            }}
+          >
             <Link to="/create" className="btn-gold btn-gold-hover">
               Start Designing
               <ArrowIcon />
@@ -264,7 +332,7 @@ function TrustedBy() {
   return (
     <section className="relative py-16">
       <div className="mx-auto max-w-6xl px-6 text-center reveal">
-        <p className="text-xs uppercase tracking-[0.4em] text-foreground/50">
+        <p className="animate-slide-left text-xs uppercase tracking-[0.4em] text-foreground/50">
           Trusted by 12,000+ hosts, planners & studios
         </p>
         <div className="relative mt-8 overflow-hidden [mask-image:linear-gradient(90deg,transparent,black_15%,black_85%,transparent)]">
@@ -283,11 +351,22 @@ function TrustedBy() {
 
 function SectionHeader({ eyebrow, title, sub }) {
   return (
-    <div className="mx-auto max-w-3xl text-center reveal">
-      <span className="text-xs uppercase tracking-[0.35em] text-gold">{eyebrow}</span>
+    <div className="mx-auto max-w-3xl text-center reveal animate-fade-up">
+      <span className="text-xs uppercase tracking-[0.35em] text-gold animate-slide-right">
+        {eyebrow}
+      </span>
+
       <div className="mx-auto mt-4 h-px w-16 gold-line" />
-      <h2 className="mt-6 font-display text-4xl sm:text-5xl">{title}</h2>
-      {sub && <p className="mt-5 text-foreground/70">{sub}</p>}
+
+      <h2 className="animate-slide-left floating-text mt-6 font-display text-4xl sm:text-5xl">
+        {title}
+      </h2>
+
+      {sub && (
+        <p className="animate-slide-right mt-5 text-foreground/70">
+          {sub}
+        </p>
+      )}
     </div>
   );
 }
@@ -310,8 +389,12 @@ function WhyUs() {
         {items.map((it, i) => (
           <div key={it.t} className="reveal glass gradient-border tilt-card rounded-3xl p-8" style={{ transitionDelay: `${i * 80}ms` }}>
             <IconBadge path={it.i} />
-            <h3 className="mt-6 font-display text-xl">{it.t}</h3>
-            <p className="mt-3 text-sm text-foreground/70">{it.d}</p>
+            <h3 className="animate-slide-left mt-6 font-display text-xl">
+              {it.t}
+            </h3>
+            <p className="animate-slide-right mt-3 text-sm text-foreground/70">
+              {it.d}
+            </p>
           </div>
         ))}
       </div>
@@ -346,7 +429,7 @@ function Categories() {
           >
             <div className="absolute inset-x-0 bottom-0 h-px gold-line opacity-40 transition group-hover:opacity-100" />
             <div className="flex items-center justify-between">
-              <h3 className="font-display text-lg">{c.name}</h3>
+              <h3 className="animate-slide-left font-display text-lg">{c.name}</h3>
               <span className="text-xs text-foreground/50">{c.count}</span>
             </div>
             <div className="mt-6 flex items-center gap-2 text-xs text-gold opacity-0 transition group-hover:opacity-100">
@@ -361,37 +444,37 @@ function Categories() {
 }
 
 function Templates() {
- const tpls = [
-  {
-    img: tplWedding,
-    name: "Aurelia Noir",
-    tag: "Wedding",
-    price: "$29",
-  },
-  {
-    img: tplBirthday,
-    name: "Golden Deco",
-    tag: "Birthday",
-    price: "$19",
-  },
-  {
-    img: tplCorporate,
-    name: "Onyx Gala",
-    tag: "Corporate",
-    price: "$34",
-  },
-  {
-    img: tplBaby,
-    name: "Blush Botanica",
-    tag: "Baby Shower",
-    price: "$22",
-  },
-];
+  const tpls = [
+    {
+      img: tplWedding,
+      name: "Aurelia Noir",
+      tag: "Wedding",
+      price: "$29",
+    },
+    {
+      img: tplBirthday,
+      name: "Golden Deco",
+      tag: "Birthday",
+      price: "$19",
+    },
+    {
+      img: tplCorporate,
+      name: "Onyx Gala",
+      tag: "Corporate",
+      price: "$34",
+    },
+    {
+      img: tplBaby,
+      name: "Blush Botanica",
+      tag: "Baby Shower",
+      price: "$22",
+    },
+  ];
   return (
     <section id="templates" className="relative py-32">
       <SectionHeader
         eyebrow="Featured Templates"
-        title={<>A collection <em className="text-gold-gradient not-italic">worth framing</em>.</>}
+        title={<>A collection <em className="text-gold-gradient not-italic animate-slide-left">worth framing</em>.</>}
         sub="Every template is fully customizable — swap fonts, palettes, motifs, and motion in one click."
       />
       <div className="mx-auto mt-16 grid max-w-6xl grid-cols-1 gap-6 px-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -409,10 +492,10 @@ function Templates() {
             </div>
             <div className="flex items-center justify-between p-5">
               <div>
-                <h3 className="font-display text-lg">{t.name}</h3>
-                <p className="text-xs text-foreground/60">Includes RSVP & motion</p>
+                <h3 className="animate-slide-left font-display text-lg">{t.name}</h3>
+                <p className="animate-slide-right text-xs text-foreground/60">Includes RSVP & motion</p>
               </div>
-              <span className="text-gold">{t.price}</span>
+              <span className="animate-fade-up text-gold">{t.price}</span>
             </div>
           </article>
         ))}
@@ -447,9 +530,8 @@ function LivePreview() {
               <button
                 key={pl.name}
                 onClick={() => setPi(i)}
-                className={`flex items-center gap-2 rounded-full border px-4 py-2 text-sm transition ${
-                  i === pi ? "border-gold text-foreground" : "border-white/10 text-foreground/70 hover:border-white/30"
-                }`}
+                className={`flex items-center gap-2 rounded-full border px-4 py-2 text-sm transition ${i === pi ? "border-gold text-foreground" : "border-white/10 text-foreground/70 hover:border-white/30"
+                  }`}
               >
                 <span className="flex -space-x-1">
                   {pl.colors.map((c) => (
@@ -536,7 +618,7 @@ function AIGenerator() {
                 Our AI composes wording, palette, typography, and motion tuned to your moment — reviewed by human designers.
               </p>
               <div className="mt-8 flex items-center gap-3 rounded-full glass p-2 pl-5">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-gold"><path d="M12 2l2 6h6l-5 4 2 7-7-4-7 4 2-7-5-4h6z"/></svg>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-gold"><path d="M12 2l2 6h6l-5 4 2 7-7-4-7 4 2-7-5-4h6z" /></svg>
                 <input
                   value={q}
                   onChange={(e) => setQ(e.target.value)}
@@ -603,7 +685,7 @@ function Testimonials() {
       <div className="mx-auto mt-16 grid max-w-6xl grid-cols-1 gap-6 px-6 md:grid-cols-3">
         {items.map((t, i) => (
           <figure key={i} className="reveal glass gradient-border rounded-3xl p-8" style={{ transitionDelay: `${i * 100}ms` }}>
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" className="text-gold/70"><path d="M7 7h4v4H7v4a4 4 0 004-4V7zm10 0h-4v4h4v4a4 4 0 004-4V7z"/></svg>
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" className="text-gold/70"><path d="M7 7h4v4H7v4a4 4 0 004-4V7zm10 0h-4v4h4v4a4 4 0 004-4V7z" /></svg>
             <blockquote className="mt-4 font-display text-xl leading-snug">"{t.q}"</blockquote>
             <figcaption className="mt-6 border-t border-white/10 pt-4 text-sm">
               <div className="text-foreground">{t.a}</div>
@@ -684,7 +766,7 @@ function FAQ() {
               >
                 <span className="font-display text-lg">{f.q}</span>
                 <span className={`grid h-8 w-8 place-items-center rounded-full glass text-gold transition ${isOpen ? "rotate-45" : ""}`}>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 5v14M5 12h14"/></svg>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 5v14M5 12h14" /></svg>
                 </span>
               </button>
               <div className={`grid overflow-hidden text-sm text-foreground/70 transition-all duration-500 ${isOpen ? "grid-rows-[1fr] pb-6" : "grid-rows-[0fr]"}`}>
@@ -700,22 +782,22 @@ function FAQ() {
 
 function Blog() {
   const posts = [
-  {
-    t: "The art of a modern save-the-date",
-    c: "Design",
-    img: tplWedding,
-  },
-  {
-    t: "Typography rules for luxury invites",
-    c: "Craft",
-    img: tplBirthday,
-  },
-  {
-    t: "Hosting a black-tie gala guests remember",
-    c: "Events",
-    img: tplCorporate,
-  },
-];
+    {
+      t: "The art of a modern save-the-date",
+      c: "Design",
+      img: tplWedding,
+    },
+    {
+      t: "Typography rules for luxury invites",
+      c: "Craft",
+      img: tplBirthday,
+    },
+    {
+      t: "Hosting a black-tie gala guests remember",
+      c: "Events",
+      img: tplCorporate,
+    },
+  ];
   return (
     <section id="blog" className="relative py-32">
       <SectionHeader eyebrow="Journal" title={<>Inspiration from the <em className="text-gold-gradient not-italic">studio</em>.</>} />
@@ -748,7 +830,7 @@ function FinalCTA() {
             style={{ background: "linear-gradient(120deg, rgba(212,175,55,0.2), rgba(45,10,84,0.6), rgba(212,175,55,0.2))" }} />
           <div className="relative">
             <span className="text-xs uppercase tracking-[0.35em] text-gold">Ready when you are</span>
-            <h2 className="mx-auto mt-6 max-w-3xl font-display text-4xl sm:text-6xl">
+            <h2 className="animate-slide-left floating-text mx-auto mt-6 max-w-3xl font-display text-4xl sm:text-6xl">
               Design an invitation your guests <em className="text-gold-gradient not-italic">won't forget</em>.
             </h2>
             <p className="mx-auto mt-6 max-w-xl text-foreground/70">Start free — no credit card required. Upgrade only when you're ready to send.</p>
