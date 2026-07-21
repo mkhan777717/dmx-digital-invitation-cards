@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import DashboardLayout from "../layouts/DashboardLayout";
 import { invitationService } from "../services/invitation.service";
 import { templateService } from "../services/template.service";
@@ -10,6 +10,31 @@ export const Route = createFileRoute("/my-invitations")({
 });
 
 function MyInvitations() {
+  const titleRef = useRef(null);
+
+  function Typewriter({ text, speed = 40 }) {
+    const [display, setDisplay] = useState("");
+
+    useEffect(() => {
+      let i = 0;
+
+      const timer = setInterval(() => {
+        setDisplay(text.slice(0, i + 1));
+        i++;
+
+        if (i >= text.length) clearInterval(timer);
+      }, speed);
+
+      return () => clearInterval(timer);
+    }, [text, speed]);
+
+    return (
+      <span>
+        {display}
+        <span className="animate-pulse text-gold">|</span>
+      </span>
+    );
+  }
   const navigate = useNavigate();
   const [invitations, setInvitations] = useState([]);
   const [templates, setTemplates] = useState([]);
@@ -89,17 +114,20 @@ function MyInvitations() {
         {/* Header */}
         <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between border-b border-white/5 pb-8">
           <div>
-            <h1 className="font-display text-4xl text-foreground">
-              Bespoke <em className="text-gold-gradient not-italic">Campaigns</em>
+            <h1
+              ref={titleRef}
+              className="animate-slide-left floating-text font-display text-4xl text-foreground"
+            >
+              <Typewriter text="Bespoke" speed={35} /><em className="text-gold-gradient not-italic">Campaigns</em>
             </h1>
-            <p className="mt-2 text-sm text-foreground/60">
+            <p className="animate-slide-right mt-2 text-sm text-foreground/60">
               Overview of all drafts, pending settlements, and live digital invitation websites.
             </p>
           </div>
 
           <div className="flex flex-wrap gap-3">
             {/* Search */}
-            <div className="relative w-full max-w-xs sm:w-60">
+            <div className="animate-slide-right relative w-full max-w-xs sm:w-60">
               <span className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground/40">
                 <Search size={14} />
               </span>
@@ -112,7 +140,7 @@ function MyInvitations() {
               />
             </div>
 
-            <Link to="/templates" className="btn-gold btn-gold-hover !py-2 !px-5 text-xs uppercase tracking-widest gap-2">
+            <Link to="/templates" className="animate-fade-up btn-gold btn-gold-hover !py-2 !px-5 text-xs uppercase tracking-widest gap-2 hover:-translate-y-0.5 duration-300">
               <Plus size={14} />
               New Invite
             </Link>
@@ -126,11 +154,10 @@ function MyInvitations() {
               <button
                 key={status}
                 onClick={() => setStatusFilter(status)}
-                className={`rounded-full px-4 py-1.5 text-xs uppercase tracking-wider transition ${
-                  statusFilter === status
-                    ? "bg-gold/15 text-gold border border-gold/30 font-medium"
-                    : "bg-white/5 text-foreground/60 border border-white/5 hover:border-white/20"
-                }`}
+                className={`animate-fade-up rounded-full px-4 py-1.5 text-xs uppercase tracking-wider transition duration-500 hover:-translate-y-0.5 ${statusFilter === status
+                  ? "bg-gold/15 text-gold border border-gold/30 font-medium"
+                  : "bg-white/5 text-foreground/60 border border-white/5 hover:border-white/20"
+                  }`}
               >
                 {status}
               </button>
@@ -138,7 +165,7 @@ function MyInvitations() {
           </div>
 
           {/* Sort selection */}
-          <div className="flex items-center gap-2 text-xs">
+          <div className="animate-slide-left flex items-center gap-2 text-xs">
             <span className="text-foreground/45">Sort By:</span>
             <select
               value={sortBy}
@@ -164,7 +191,7 @@ function MyInvitations() {
         ) : (
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {filteredInvitations.map((inv) => (
-              <article key={inv._id} className="glass gradient-border rounded-3xl overflow-hidden flex flex-col justify-between hover:border-gold/30 transition-all duration-300">
+              <article key={inv._id} className="glass gradient-border rounded-3xl overflow-hidden flex flex-col justify-between animate-fade-up hover:-translate-y-2 hover:shadow-[0_30px_80px_-20px_rgba(0,0,0,0.65)] transition-all duration-700">
                 <div>
                   {/* Thumbnail Banner */}
                   <div className="relative aspect-[16/9] overflow-hidden bg-noir border-b border-white/5">
@@ -177,23 +204,22 @@ function MyInvitations() {
                     <span className="absolute left-4 top-4 rounded-full glass border border-white/10 px-2.5 py-0.5 text-[9px] uppercase tracking-widest text-gold font-semibold">
                       {getTemplateTitle(inv.templateId)}
                     </span>
-                    <span className={`absolute right-4 top-4 rounded-full px-2.5 py-0.5 text-[9px] uppercase tracking-widest border font-semibold ${
-                      inv.status === "Published"
-                        ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
-                        : "bg-amber-500/10 text-amber-400 border-amber-500/20"
-                    }`}>
+                    <span className={`absolute right-4 top-4 rounded-full px-2.5 py-0.5 text-[9px] uppercase tracking-widest border font-semibold ${inv.status === "Published"
+                      ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
+                      : "bg-amber-500/10 text-amber-400 border-amber-500/20"
+                      }`}>
                       {inv.status}
                     </span>
                   </div>
 
                   <div className="p-6 space-y-4">
-                    <h3 className="font-display text-xl text-foreground">
+                    <h3 className="animate-slide-left font-display text-xl text-foreground">
                       {inv.eventDetails.brideName && inv.eventDetails.groomName
                         ? `${inv.eventDetails.brideName} & ${inv.eventDetails.groomName}`
                         : inv.eventDetails.celebrantName || inv.eventDetails.eventTitle || "Bespoke Invitation"}
                     </h3>
 
-                    <div className="space-y-2 text-xs text-foreground/60 font-medium">
+                    <div className="animate-slide-right space-y-2 text-xs text-foreground/60 font-medium">
                       <div className="flex items-center gap-2">
                         <Calendar size={13} className="text-gold/60 shrink-0" />
                         <span>Date: {inv.eventDetails.date || "Undefined"}</span>
@@ -209,9 +235,8 @@ function MyInvitations() {
                 <div className="border-t border-white/5 p-5 bg-noir/20 flex items-center justify-between">
                   <div className="flex flex-col">
                     <span className="text-[9px] uppercase tracking-widest text-foreground/45">Payment Status</span>
-                    <span className={`text-xs font-semibold mt-0.5 ${
-                      inv.paymentStatus === "Paid" ? "text-emerald-400" : "text-amber-400 animate-pulse"
-                    }`}>
+                    <span className={`animate-slide-left text-xs font-semibold mt-0.5 ${inv.paymentStatus === "Paid" ? "text-emerald-400" : "text-amber-400 animate-pulse"
+                      }`}>
                       {inv.paymentStatus === "Paid" ? "Completed" : "Pending Action"}
                     </span>
                   </div>
@@ -229,14 +254,14 @@ function MyInvitations() {
                     <Link
                       to={`/create`}
                       search={{ id: inv._id }}
-                      className="p-2.5 rounded-full bg-white/5 border border-white/10 text-foreground/75 hover:text-gold hover:border-gold/50 transition"
+                      className="animate-fade-up p-2.5 rounded-full bg-white/5 border border-white/10 text-foreground/75 hover:text-gold hover:border-gold/50 hover:scale-110 transition-all duration-300"
                       title="Edit Campaign"
                     >
                       <Edit2 size={13} />
                     </Link>
                     <button
                       onClick={(e) => handleDelete(inv._id, e)}
-                      className="p-2.5 rounded-full bg-white/5 border border-white/10 text-foreground/75 hover:text-rose-400 hover:border-rose-400/50 transition"
+                      className="animate-fade-up p-2.5 rounded-full bg-white/5 border border-white/10 text-foreground/75 hover:text-gold hover:border-gold/50 hover:scale-110 transition-all duration-300"
                       title="Delete Campaign"
                     >
                       <Trash2 size={13} />
